@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BuchetMD</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌸</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0d0a08;--card:#161210;--rose:#e8856a;--rose2:#c9604a;--gold:#d4a85a;--cream:#f5ede4;--muted:#8a7a72;--border:rgba(255,255,255,0.07)}
+html{scroll-behavior:smooth}
+body{font-family:'Manrope',sans-serif;color:var(--cream);overflow-x:hidden;background:#0d0a08}
+
+/* GIF full-page fixed background - handled by #gif-bg element */
+.ticker,.hero,.strip,.section,footer{position:relative;z-index:1}
+.ticker{position:relative;z-index:1;background:var(--rose);color:#fff;font-size:12px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;padding:10px 0;overflow:hidden;white-space:nowrap}
+.ticker-track{display:inline-flex;animation:ticker 28s linear infinite}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.hero-content{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center;padding:80px 40px;max-width:720px;width:100%}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(232,133,106,.12);border:1px solid rgba(232,133,106,.3);color:var(--rose);font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;padding:7px 16px;border-radius:100px;margin-bottom:28px;animation:fadeUp .8s ease forwards;opacity:0}
+.hero-badge::before{content:'●';font-size:7px;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.hero-title{font-family:'Playfair Display',serif;font-size:clamp(42px,6vw,82px);line-height:1.08;font-weight:700;color:#fff;margin-bottom:18px;animation:fadeUp .8s .15s ease forwards;opacity:0}
+.hero-title em{color:var(--rose);font-style:italic}
+.hero-sub{font-size:18px;color:rgba(245,237,228,.75);line-height:1.7;max-width:480px;margin-bottom:44px;font-weight:300;animation:fadeUp .8s .3s ease forwards;opacity:0}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;animation:fadeUp .8s .45s ease forwards;opacity:0}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.btn-primary{display:inline-flex;align-items:center;gap:10px;background:var(--rose);color:#fff;padding:16px 32px;border-radius:6px;font-family:'Manrope',sans-serif;font-size:14px;font-weight:600;letter-spacing:.05em;text-decoration:none;border:none;cursor:pointer;transition:background .25s,transform .2s,box-shadow .25s;box-shadow:0 8px 32px rgba(232,133,106,.35)}
+.btn-primary:hover{background:var(--rose2);transform:translateY(-2px);box-shadow:0 14px 40px rgba(232,133,106,.45)}
+.btn-secondary{display:inline-flex;align-items:center;gap:10px;background:transparent;color:var(--cream);padding:16px 28px;border-radius:6px;font-family:'Manrope',sans-serif;font-size:14px;font-weight:500;text-decoration:none;border:1.5px solid rgba(255,255,255,.15);cursor:pointer;transition:border-color .25s,color .25s}
+.btn-secondary:hover{border-color:rgba(255,255,255,.35);color:#fff}
+.strip{display:flex;justify-content:center;flex-wrap:wrap;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:rgba(16,10,8,0.75);backdrop-filter:blur(8px)}
+.strip-item{display:flex;align-items:center;gap:12px;padding:22px 36px;border-right:1px solid var(--border);font-size:13px;color:var(--muted)}
+.strip-item:last-child{border-right:none}
+.strip-icon{font-size:20px}
+.strip-item strong{color:var(--cream);font-weight:600}
+@media(max-width:600px){.strip-item{padding:14px 16px;font-size:12px}}
+.section{padding:90px 40px}
+@media(max-width:768px){.section{padding:60px 20px}}
+.section-top{text-align:center;margin-bottom:56px}
+.section-tag{display:inline-block;font-size:11px;letter-spacing:.25em;text-transform:uppercase;color:var(--rose);font-weight:600;margin-bottom:14px}
+.section-title{font-family:'Playfair Display',serif;font-size:clamp(30px,4vw,48px);font-weight:700;color:#fff;line-height:1.15}
+.section-title em{color:var(--rose);font-style:italic}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;max-width:1300px;margin:0 auto}
+.card{background:rgba(16,9,6,0.82);backdrop-filter:blur(6px);border:1px solid var(--border);border-radius:10px;overflow:hidden;cursor:pointer;transition:border-color .3s,box-shadow .3s,transform .3s}
+.card:hover{border-color:rgba(232,133,106,.35);box-shadow:0 20px 60px rgba(0,0,0,.4);transform:translateY(-6px)}
+.card-img-wrap{overflow:hidden;position:relative}
+.card-img{width:100%;height:280px;object-fit:cover;display:block;transition:transform .5s ease;background:#1a0f0a}
+.card:hover .card-img{transform:scale(1.05)}
+.card-ph{width:100%;height:280px;background:linear-gradient(135deg,#1e1008,#2e1a10);display:none;align-items:center;justify-content:center;flex-direction:column;gap:8px}
+.card-ph-num{font-family:'Playfair Display',serif;font-size:48px;color:rgba(232,133,106,.15);font-weight:700}
+.card-ph-label{font-size:11px;color:var(--muted);letter-spacing:.08em}
+.card-badge{position:absolute;top:14px;left:14px;background:var(--rose);color:#fff;font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:5px 12px;border-radius:100px}
+.card-body{padding:20px 22px 22px}
+.card-name{font-family:'Playfair Display',serif;font-size:20px;color:#fff;font-weight:400;margin-bottom:5px}
+.card-desc{font-size:12px;color:var(--muted);margin-bottom:16px;line-height:1.6}
+.card-footer{display:flex;align-items:center;justify-content:space-between}
+.card-price{font-family:'Playfair Display',serif;font-size:24px;color:var(--rose);font-weight:700}
+.card-price span{font-size:13px;color:var(--muted);font-family:'Manrope',sans-serif;font-weight:400}
+.card-btn{display:inline-flex;align-items:center;gap:6px;background:rgba(232,133,106,.1);border:1px solid rgba(232,133,106,.3);color:var(--rose);font-size:12px;font-weight:600;padding:9px 18px;border-radius:6px;transition:background .25s,color .25s;cursor:pointer;font-family:'Manrope',sans-serif}
+.card-btn:hover{background:var(--rose);color:#fff}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s;backdrop-filter:blur(6px)}
+.overlay.open{opacity:1;pointer-events:all}
+.modal{background:#1a110d;border:1px solid rgba(255,255,255,.1);border-radius:16px;width:100%;max-width:500px;padding:44px 40px;position:relative;transform:translateY(30px) scale(.97);transition:transform .3s ease;max-height:90vh;overflow-y:auto}
+.overlay.open .modal{transform:translateY(0) scale(1)}
+@media(max-width:500px){.modal{padding:30px 20px}}
+.modal-close{position:absolute;top:16px;right:16px;background:rgba(255,255,255,.06);border:none;color:var(--muted);width:34px;height:34px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s}
+.modal-close:hover{background:rgba(255,255,255,.14);color:#fff}
+.modal-tag{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--rose);font-weight:600;margin-bottom:10px}
+.modal-title{font-family:'Playfair Display',serif;font-size:26px;color:#fff;margin-bottom:26px;line-height:1.2}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:7px}
+.field input,.field textarea,.field select{width:100%;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.1);border-radius:8px;padding:13px 16px;color:#fff;font-family:'Manrope',sans-serif;font-size:14px;transition:border-color .2s;outline:none}
+.field input::placeholder,.field textarea::placeholder{color:var(--muted)}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--rose)}
+.field textarea{resize:none;height:80px;line-height:1.6}
+.field select option{background:#1a110d}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:400px){.field-row{grid-template-columns:1fr}}
+.modal-submit{width:100%;padding:16px;margin-top:8px;background:var(--rose);color:#fff;border:none;border-radius:8px;font-family:'Manrope',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:background .25s,transform .2s;box-shadow:0 8px 28px rgba(232,133,106,.3)}
+.modal-submit:hover{background:var(--rose2);transform:translateY(-1px)}
+.modal-note{font-size:12px;color:var(--muted);text-align:center;margin-top:14px;line-height:1.7}
+.modal-note a{color:var(--rose);text-decoration:none}
+.success-screen{display:none;text-align:center;padding:30px 0}
+.success-icon{font-size:56px;margin-bottom:14px}
+.success-title{font-family:'Playfair Display',serif;font-size:26px;color:#fff;margin-bottom:10px}
+.success-text{font-size:14px;color:var(--muted);line-height:1.7}
+.contact-wrap{max-width:680px;margin:0 auto;background:rgba(16,9,6,0.82);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:16px;padding:52px;position:relative;overflow:hidden}
+@media(max-width:600px){.contact-wrap{padding:32px 22px}}
+.contact-wrap::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--rose2),var(--rose),var(--gold))}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:480px){.contact-grid{grid-template-columns:1fr}}
+.form-note{font-size:12px;color:var(--muted);text-align:center;margin-top:14px;line-height:1.7}
+.form-note a{color:var(--rose);text-decoration:none}
+.date-row{display:flex;gap:8px}
+.date-sel{background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.1);border-radius:8px;padding:13px 10px;color:#fff;font-family:'Manrope',sans-serif;font-size:14px;outline:none;transition:border-color .2s;cursor:pointer}
+.date-sel:focus{border-color:var(--rose)}
+.date-sel option{background:#1a110d}
+.float-wrap{position:fixed;right:22px;bottom:28px;display:flex;flex-direction:column;gap:12px;z-index:500;align-items:flex-end}
+.fb{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 6px 24px rgba(0,0,0,.3);transition:transform .25s,box-shadow .25s;position:relative;animation:fbIn .5s ease forwards;opacity:0}
+.fb:hover{transform:scale(1.12) translateY(-2px);box-shadow:0 12px 32px rgba(0,0,0,.4)}
+.fb svg{width:26px;height:26px;fill:#fff}
+.fb-wa{background:linear-gradient(135deg,#25d366,#128c7e);animation-delay:1.2s}
+.fb-tg{background:linear-gradient(135deg,#2aabee,#229ed9);animation-delay:1.5s}
+.fb-tip{position:absolute;right:66px;top:50%;background:#fff;color:#222;font-size:12px;font-weight:600;padding:6px 14px;border-radius:100px;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,.15);opacity:0;transform:translateY(-50%) translateX(6px);transition:opacity .2s,transform .2s;pointer-events:none}
+.fb:hover .fb-tip{opacity:1;transform:translateY(-50%) translateX(0)}
+@keyframes fbIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
+.lang-btn{width:56px;height:56px;border-radius:50%;border:none;background:var(--rose);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 24px rgba(232,133,106,.45);transition:transform .25s,background .25s;animation:fbIn .5s .9s ease forwards;opacity:0;font-size:28px;line-height:1}
+.lang-btn:hover{background:var(--rose2);transform:scale(1.1) translateY(-2px)}
+.lang-wrap{position:relative}
+.lang-dropdown{position:absolute;bottom:calc(100% + 10px);right:0;background:#1a110d;border:1px solid rgba(255,255,255,.12);border-radius:10px;overflow:hidden;min-width:148px;box-shadow:0 12px 40px rgba(0,0,0,.5);opacity:0;pointer-events:none;transform:translateY(8px);transition:opacity .22s,transform .22s}
+.lang-dropdown.open{opacity:1;pointer-events:all;transform:translateY(0)}
+.lang-opt{display:flex;align-items:center;gap:12px;padding:12px 18px;cursor:pointer;transition:background .15s;font-size:13px;font-weight:500;color:var(--cream);font-family:'Manrope',sans-serif}
+.lang-opt:hover{background:rgba(232,133,106,.12)}
+.lang-opt.active{color:var(--rose)}
+.lang-opt .flag{font-size:20px}
+footer{border-top:1px solid var(--border);padding:30px 40px;text-align:center;color:var(--muted);font-size:13px}
+footer strong{color:var(--rose);font-family:'Playfair Display',serif;font-size:17px;font-style:italic;font-weight:400}
+footer a{color:var(--rose);text-decoration:none}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#0d0a08}::-webkit-scrollbar-thumb{background:#3a2018;border-radius:3px}
+
+/* ── TABLET (max 1024px) ── */
+@media(max-width:1024px){
+  .hero-content{padding:60px 32px}
+  .section{padding:70px 32px}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+  .contact-wrap{padding:44px 36px}
+}
+
+/* ── MOBILE LARGE (max 768px) ── */
+@media(max-width:768px){
+  .ticker{font-size:11px;padding:9px 0;letter-spacing:.1em}
+  .hero-content{padding:50px 20px 60px}
+  .hero-badge{font-size:10px;padding:6px 14px;margin-bottom:20px}
+  .hero-sub{font-size:15px;margin-bottom:32px}
+  .hero-actions{gap:10px;flex-direction:column;width:100%;align-items:center}
+  .btn-primary,.btn-secondary{width:100%;max-width:320px;justify-content:center;padding:15px 24px}
+  .section{padding:52px 16px}
+  .section-top{margin-bottom:36px}
+  .grid{grid-template-columns:1fr 1fr;gap:12px}
+  .card-img{height:200px}
+  .card-body{padding:14px 14px 16px}
+  .card-name{font-size:17px}
+  .card-desc{font-size:11px;margin-bottom:12px}
+  .card-price{font-size:20px}
+  .card-btn{font-size:11px;padding:8px 12px}
+  .contact-wrap{padding:28px 16px;border-radius:12px}
+  .contact-grid{grid-template-columns:1fr}
+  .date-row{gap:6px}
+  .date-sel{padding:12px 8px;font-size:13px}
+  .field input,.field textarea,.field select{font-size:16px;padding:14px 14px} /* 16px prevents iOS zoom */
+  .modal{padding:28px 18px;border-radius:12px;margin:10px}
+  .modal-title{font-size:22px;margin-bottom:20px}
+  .field-row{grid-template-columns:1fr}
+  .float-wrap{right:14px;bottom:18px;gap:10px}
+  .fb{width:50px;height:50px}
+  .fb svg{width:22px;height:22px}
+  .lang-btn{width:50px;height:50px;font-size:24px}
+  .fb-tip{display:none}
+  footer{padding:24px 20px;font-size:12px}
+}
+
+/* ── MOBILE SMALL (max 480px) ── */
+@media(max-width:480px){
+  .hero-content{padding:40px 16px 50px}
+  .hero-badge{font-size:9px;letter-spacing:.12em}
+  .hero-sub{font-size:14px}
+  .grid{grid-template-columns:1fr}
+  .card-img{height:240px}
+  .card-body{padding:16px}
+  .card-name{font-size:19px}
+  .card-footer{gap:10px}
+  .section{padding:44px 14px}
+  .contact-wrap{padding:24px 14px}
+  .overlay{padding:10px}
+  .modal{padding:24px 16px;max-height:95vh}
+  .lang-dropdown{right:0;min-width:140px}
+}
+
+/* ── TOUCH: remove hover effects on mobile ── */
+@media(hover:none){
+  .card:hover{transform:none;box-shadow:none;border-color:var(--border)}
+  .card:active{border-color:rgba(232,133,106,.35);box-shadow:0 8px 30px rgba(0,0,0,.3)}
+  .btn-primary:hover{transform:none}
+  .btn-primary:active{background:var(--rose2)}
+  .fb:hover{transform:none}
+  .fb:active{transform:scale(0.95)}
+}
+</style>
+</head>
+<body>
+
+<!-- FULL PAGE VIDEO BACKGROUND -->
+<div id="gif-bg" style="position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none">
+  <video autoplay muted loop playsinline
+    style="width:100%;height:100%;object-fit:cover;display:block">
+    <source src="bg-video.mp4" type="video/mp4">
+  </video>
+  <div style="position:absolute;inset:0;background:rgba(6,3,2,0.60)"></div>
+</div>
+
+<div class="ticker">
+  <div class="ticker-track">
+    <span id="ticker-chunk1"></span>
+    <span id="ticker-chunk2"></span>
+  </div>
+</div>
+
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge" id="hero-badge"></div>
+    <h1 class="hero-title" id="hero-title"></h1>
+    <p class="hero-sub" id="hero-sub"></p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="openModal(null)" id="btn-order"></button>
+      <a href="#collection" class="btn-secondary" id="btn-view"></a>
+    </div>
+  </div>
+</section>
+
+
+
+<section class="section" id="collection">
+  <div class="section-top">
+    <div class="section-tag" id="col-tag"></div>
+    <h2 class="section-title" id="col-title"></h2>
+  </div>
+  <div class="grid" id="grid"></div>
+</section>
+
+<section class="section" style="padding-top:0" id="order">
+  <div class="section-top">
+    <div class="section-tag" id="form-tag"></div>
+    <h2 class="section-title" id="form-title"></h2>
+  </div>
+  <div class="contact-wrap">
+    <div class="contact-grid">
+      <div class="field"><label id="lbl-name"></label><input type="text" id="cf-name"></div>
+      <div class="field"><label id="lbl-phone"></label><input type="tel" id="cf-phone"></div>
+    </div>
+    <div class="field"><label id="lbl-bouquet"></label><select id="cf-bouquet"></select></div>
+    <div class="contact-grid">
+      <div class="field">
+        <label id="lbl-date"></label>
+        <div class="date-row">
+          <select id="cf-day" class="date-sel" style="flex:1"></select>
+          <select id="cf-month" class="date-sel" style="flex:2"></select>
+          <select id="cf-year" class="date-sel" style="flex:1.4"></select>
+        </div>
+      </div>
+      <div class="field"><label id="lbl-addr"></label><input type="text" id="cf-addr"></div>
+    </div>
+    <div class="field"><label id="lbl-msg"></label><textarea id="cf-msg"></textarea></div>
+    <button class="btn-primary" id="cf-submit" style="width:100%;justify-content:center;font-size:15px;padding:18px" onclick="submitContact()"></button>
+    <p class="form-note" id="form-note"></p>
+    <div id="cf-success" style="display:none;text-align:center;padding:24px 0">
+      <div style="font-size:52px;margin-bottom:12px">🌸</div>
+      <div style="font-family:'Playfair Display',serif;font-size:26px;color:#fff;margin-bottom:8px" id="success-title"></div>
+      <div style="font-size:14px;color:var(--muted);line-height:1.7" id="success-text"></div>
+    </div>
+  </div>
+</section>
+
+<div class="overlay" id="overlay" onclick="bgClose(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div id="m-form">
+      <div class="modal-tag" id="m-tag"></div>
+      <div class="modal-title" id="m-title"></div>
+      <div class="field-row">
+        <div class="field"><label id="m-lbl-name"></label><input type="text" id="m-name"></div>
+        <div class="field"><label id="m-lbl-phone"></label><input type="tel" id="m-phone"></div>
+      </div>
+      <div class="field"><label id="m-lbl-bouquet"></label><select id="m-bouquet"></select></div>
+      <div class="field-row">
+        <div class="field">
+          <label id="m-lbl-date"></label>
+          <div class="date-row">
+            <select id="m-day" class="date-sel" style="flex:1"></select>
+            <select id="m-month" class="date-sel" style="flex:2"></select>
+            <select id="m-year" class="date-sel" style="flex:1.4"></select>
+          </div>
+        </div>
+        <div class="field"><label id="m-lbl-addr"></label><input type="text" id="m-addr"></div>
+      </div>
+      <div class="field"><label id="m-lbl-msg"></label><textarea id="m-msg"></textarea></div>
+      <button class="modal-submit" id="m-submit" onclick="submitModal()"></button>
+      <p class="modal-note" id="m-note"></p>
+    </div>
+    <div class="success-screen" id="m-success">
+      <div class="success-icon">🌸</div>
+      <div class="success-title" id="m-success-title"></div>
+      <div class="success-text" id="m-success-text"></div>
+    </div>
+  </div>
+</div>
+
+<div class="float-wrap">
+  <div class="lang-wrap">
+    <button class="lang-btn" id="langBtn" onclick="toggleLang()">
+      <span id="currentFlag">🇷🇴</span>
+    </button>
+    <div class="lang-dropdown" id="langDropdown">
+      <div class="lang-opt active" id="opt-ro" onclick="setLang('ro')"><span class="flag">🇷🇴</span> Română</div>
+      <div class="lang-opt" id="opt-ru" onclick="setLang('ru')"><span class="flag">🇷🇺</span> Русский</div>
+    </div>
+  </div>
+  <a href="https://wa.me/37367355732" class="fb fb-wa" target="_blank">
+    <span class="fb-tip">WhatsApp</span>
+    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+  <a href="https://t.me/BuchetMD" class="fb fb-tg" target="_blank">
+    <span class="fb-tip">Telegram</span>
+    <svg viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+  </a>
+</div>
+
+<footer>
+  <strong>BuchetMD</strong> &nbsp;·&nbsp; <span id="footer-text"></span> &nbsp;·&nbsp; Chișinău &nbsp;·&nbsp; <a href="https://wa.me/37367355732">+373 67 355 732</a>
+</footer>
+
+<script>
+const T = {
+  ro: {
+    pageTitle:'BuchetMD',
+    ticker:'🌸 Livrare gratuită în Chișinău \u00a0·\u00a0 Flori proaspete în fiecare zi \u00a0·\u00a0 Comenzi 24/7 \u00a0·\u00a0 Buchete la comandă \u00a0·\u00a0 \u00a0\u00a0\u00a0\u00a0 🌸 Livrare gratuită în Chișinău \u00a0·\u00a0 Flori proaspete în fiecare zi \u00a0·\u00a0 Comenzi 24/7 \u00a0·\u00a0 Buchete la comandă \u00a0·\u00a0 \u00a0\u00a0\u00a0\u00a0 🌸 Livrare gratuită în Chișinău \u00a0·\u00a0 Flori proaspete în fiecare zi \u00a0·\u00a0 Comenzi 24/7 \u00a0·\u00a0 Buchete la comandă \u00a0·\u00a0',
+    badge:'🌹 Buchete la comandă · Chișinău',
+    heroTitle:'Flori la <em>comandă</em>',
+    heroSub:'Buchete de flori la un preț bun pentru toți.',
+    btnOrder:'Comandă un buchet',
+    btnView:'Vezi colecția ↓',
+    strip1:'<strong>Livrare gratuită</strong> în Chișinău',
+    strip2:'<strong>Buchet după dorința</strong> dumneavoastră',
+    strip3:'<strong>Flori proaspete</strong> în fiecare zi',
+    strip4:'<strong>Comenzi 24/7</strong> pe WhatsApp și Telegram',
+    colTag:'Colecția noastră',
+    colTitle:'Alege <em>buchetul tău</em>',
+    formTag:'Contactează-ne',
+    formTitle:'Plasează <em>comanda</em>.',
+    lblName:'Numele tău',lblPhone:'Telefon',
+    lblBouquet:'Alege buchetul',lblDate:'Data livrării',
+    lblAddr:'Adresa livrării',lblMsg:'Mesaj / Felicitare',
+    phName:'Ana',phPhone:'+373 xx xxx xx',
+    phBouquetDef:'— din colecție —',
+    phAddr:'Str. Pușkin, 12',phMsg:'Text pentru felicitare, dorințe speciale...',
+    cfSubmit:'Trimite cererea →',
+    formNote:'Te sunăm în 15 minute · Plata la livrare · <a href="https://wa.me/37367355732">WhatsApp</a> · <a href="https://t.me/BuchetMD">Telegram</a>',
+    successTitle:'Vă mulțumim pentru comandă!',successText:'Operatorul vă va lua legătura în curând. O zi frumoasă în continuare!',
+    mTag:'Comandă rapidă',mDefaultTitle:'Comandă un buchet',
+    mSubmit:'Plasează comanda →',
+    mNote:'Te sunăm în 15 minute · Plata la livrare<br>Sau scrie pe <a href="https://wa.me/37367355732">WhatsApp</a>',
+    mSuccessTitle:'Vă mulțumim pentru comandă!',mSuccessText:'Operatorul vă va lua legătura în curând. O zi frumoasă în continuare!',
+    footerText:'Buchete de autor cu livrare',
+    btnCard:'Comandă →',
+    alertFill:'Te rugăm să completezi numele și telefonul',
+    months:['Ianuarie','Februarie','Martie','Aprilie','Mai','Iunie','Iulie','August','Septembrie','Octombrie','Noiembrie','Decembrie'],
+    bouquets:[
+      {name:'Zori Roz',desc:'Bujori, trandafiri, eustomă',price:'1 200',badge:'Top vânzări'},
+      {name:'Tandrețe Albă',desc:'Trandafiri albi, margarete, gypsophila',price:'980',badge:null},
+      {name:'Zi Însorită',desc:'Floarea-soarelui, ranunculi, lavandă',price:'850',badge:null},
+      {name:'Vis Lila',desc:'Lavandă, lalele violet',price:'1 050',badge:'Noutate'},
+      {name:'Inimă Roșie',desc:'Trandafiri roșii, gălbenele',price:'1 400',badge:null},
+      {name:'Blues Piersică',desc:'Bujori piersică, frezie',price:'1 100',badge:null},
+      {name:'Briză de Mentă',desc:'Eustomă, verdeață, crizanteme',price:'760',badge:null},
+      {name:'Chic de Seară',desc:'Trandafiri bordo, hortensie închisă',price:'1 650',badge:'Premium'},
+      {name:'Studiu de Grădină',desc:'Flori de câmp amestecate',price:'680',badge:null},
+      {name:'Apus Coral',desc:'Trandafiri corai, orhidee',price:'1 300',badge:null},
+      {name:'Pasărea Albastră',desc:'Irisi albaștri, lalele albe',price:'920',badge:null},
+      {name:'Poveste de Toamnă',desc:'Crizanteme, scoruș, flori uscate',price:'790',badge:null},
+    ]
+  },
+  ru: {
+    pageTitle:'BuchetMD',
+    ticker:'🌸 Бесплатная доставка по Кишинёву \u00a0·\u00a0 Свежие цветы каждый день \u00a0·\u00a0 Заказ 24/7 \u00a0·\u00a0 Букеты на заказ \u00a0·\u00a0 \u00a0\u00a0\u00a0\u00a0 🌸 Бесплатная доставка по Кишинёву \u00a0·\u00a0 Свежие цветы каждый день \u00a0·\u00a0 Заказ 24/7 \u00a0·\u00a0 Букеты на заказ \u00a0·\u00a0 \u00a0\u00a0\u00a0\u00a0 🌸 Бесплатная доставка по Кишинёву \u00a0·\u00a0 Свежие цветы каждый день \u00a0·\u00a0 Заказ 24/7 \u00a0·\u00a0 Букеты на заказ \u00a0·\u00a0',
+    badge:'🌹 Букеты на заказ · Кишинёв',
+    heroTitle:'Цветы на <em>заказ</em>',
+    heroSub:'Букеты по доступным ценам для всех.',
+    btnOrder:'Заказать букет',
+    btnView:'Смотреть коллекцию ↓',
+    strip1:'<strong>Бесплатная доставка</strong> по Кишинёву',
+    strip2:'<strong>Букет по вашему</strong> желанию',
+    strip3:'<strong>Свежие цветы</strong> каждый день',
+    strip4:'<strong>Заказ 24/7</strong> в WhatsApp и Telegram',
+    colTag:'Наша коллекция',
+    colTitle:'Выберите <em>свой</em> букет',
+    formTag:'Оставить заявку',
+    formTitle:'Оформить <em>заказ</em>.',
+    lblName:'Ваше имя',lblPhone:'Телефон',
+    lblBouquet:'Выберите букет',lblDate:'Дата доставки',
+    lblAddr:'Адрес доставки',lblMsg:'Пожелания / Открытка',
+    phName:'Анна',phPhone:'+373 xx xxx xx',
+    phBouquetDef:'— из коллекции —',
+    phAddr:'ул. Пушкина, 12',phMsg:'Текст для открытки, особые пожелания...',
+    cfSubmit:'Отправить заявку →',
+    formNote:'Перезвоним за 15 минут · Оплата при получении · <a href="https://wa.me/37367355732">WhatsApp</a> · <a href="https://t.me/BuchetMD">Telegram</a>',
+    successTitle:'Благодарим за заказ!',successText:'Оператор свяжется с вами в ближайшее время. Хорошего дня!',
+    mTag:'Быстрый заказ',mDefaultTitle:'Оформить букет',
+    mSubmit:'Оформить заказ →',
+    mNote:'Перезвоним за 15 минут · Оплата при получении<br>Или напишите в <a href="https://wa.me/37367355732">WhatsApp</a>',
+    mSuccessTitle:'Благодарим за заказ!',mSuccessText:'Оператор свяжется с вами в ближайшее время. Хорошего дня!',
+    footerText:'Авторские букеты с доставкой',
+    btnCard:'Заказать →',
+    alertFill:'Пожалуйста, заполните имя и телефон',
+    months:['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'],
+    bouquets:[
+      {name:'Розовый рассвет',desc:'Пионы, розы, эустома',price:'1 200',badge:'Хит продаж'},
+      {name:'Белая нежность',desc:'Белые розы, ромашки, гипсофила',price:'980',badge:null},
+      {name:'Солнечный день',desc:'Подсолнухи, ранункулюсы, лаванда',price:'850',badge:null},
+      {name:'Лиловый сон',desc:'Лаванда, фиолетовые тюльпаны',price:'1 050',badge:'Новинка'},
+      {name:'Алое сердце',desc:'Красные розы, бархатцы',price:'1 400',badge:null},
+      {name:'Персиковый блюз',desc:'Персиковые пионы, фрезия',price:'1 100',badge:null},
+      {name:'Мятный бриз',desc:'Эустома, зелень, хризантемы',price:'760',badge:null},
+      {name:'Вечерний шик',desc:'Бордовые розы, тёмная гортензия',price:'1 650',badge:'Премиум'},
+      {name:'Садовый этюд',desc:'Смешанные полевые цветы',price:'680',badge:null},
+      {name:'Коралловый закат',desc:'Коралловые розы, орхидеи',price:'1 300',badge:null},
+      {name:'Синяя птица',desc:'Синие ирисы, белые тюльпаны',price:'920',badge:null},
+      {name:'Осенняя сказка',desc:'Хризантемы, рябина, сухоцветы',price:'790',badge:null},
+    ]
+  }
+};
+
+let lang = 'ro';
+let modalBouquet = null;
+
+function applyLang() {
+  const t = T[lang];
+  document.title = t.pageTitle;
+  var tickerText = t.ticker;
+  document.getElementById('ticker-chunk1').textContent = tickerText;
+  document.getElementById('ticker-chunk2').textContent = tickerText;
+  document.getElementById('hero-badge').textContent = t.badge;
+  document.getElementById('hero-title').innerHTML = t.heroTitle;
+  document.getElementById('hero-sub').textContent = t.heroSub;
+  document.getElementById('btn-order').textContent = t.btnOrder;
+  document.getElementById('btn-view').textContent = t.btnView;
+  document.getElementById('col-tag').textContent = t.colTag;
+  document.getElementById('col-title').innerHTML = t.colTitle;
+  document.getElementById('form-tag').textContent = t.formTag;
+  document.getElementById('form-title').innerHTML = t.formTitle;
+  document.getElementById('lbl-name').textContent = t.lblName;
+  document.getElementById('lbl-phone').textContent = t.lblPhone;
+  document.getElementById('lbl-bouquet').textContent = t.lblBouquet;
+  document.getElementById('lbl-date').textContent = t.lblDate;
+  document.getElementById('lbl-addr').textContent = t.lblAddr;
+  document.getElementById('lbl-msg').textContent = t.lblMsg;
+  document.getElementById('cf-name').placeholder = t.phName;
+  document.getElementById('cf-phone').placeholder = t.phPhone;
+  document.getElementById('cf-addr').placeholder = t.phAddr;
+  document.getElementById('cf-msg').placeholder = t.phMsg;
+  document.getElementById('cf-submit').textContent = t.cfSubmit;
+  document.getElementById('form-note').innerHTML = t.formNote;
+  document.getElementById('success-title').textContent = t.successTitle;
+  document.getElementById('success-text').textContent = t.successText;
+  document.getElementById('m-tag').textContent = t.mTag;
+  document.getElementById('m-lbl-name').textContent = t.lblName;
+  document.getElementById('m-lbl-phone').textContent = t.lblPhone;
+  document.getElementById('m-lbl-bouquet').textContent = t.lblBouquet;
+  document.getElementById('m-lbl-date').textContent = t.lblDate;
+  document.getElementById('m-lbl-addr').textContent = t.lblAddr;
+  document.getElementById('m-lbl-msg').textContent = t.lblMsg;
+  document.getElementById('m-name').placeholder = t.phName;
+  document.getElementById('m-phone').placeholder = t.phPhone;
+  document.getElementById('m-addr').placeholder = t.phAddr;
+  document.getElementById('m-msg').placeholder = t.phMsg;
+  document.getElementById('m-submit').textContent = t.mSubmit;
+  document.getElementById('m-note').innerHTML = t.mNote;
+  document.getElementById('m-success-title').textContent = t.mSuccessTitle;
+  document.getElementById('m-success-text').textContent = t.mSuccessText;
+  document.getElementById('footer-text').textContent = t.footerText;
+  buildGrid();
+  buildDatePickers();
+}
+
+function buildGrid() {
+  const t = T[lang];
+  const grid = document.getElementById('grid');
+  const cfSel = document.getElementById('cf-bouquet');
+  const mSel = document.getElementById('m-bouquet');
+  grid.innerHTML = '';
+  cfSel.innerHTML = '<option value="">' + t.phBouquetDef + '</option>';
+  mSel.innerHTML = '';
+  var PHOTOS = [
+    'photos/photo1.jpg',
+    'photos/photo2.jpg',
+    'photos/photo3.jpg',
+    'photos/photo4.jpg',
+    'photos/photo5.jpg',
+    'photos/photo6.jpg',
+    'photos/photo7.jpg',
+    'photos/photo8.jpg',
+    'photos/photo9.jpg',
+    'photos/photo10.jpg',
+    'photos/photo11.jpg',
+    'photos/photo12.jpg',
+  ];
+  t.bouquets.forEach(function(b, i) {
+    var img = PHOTOS[i];
+    var card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML =
+      '<div class="card-img-wrap">' +
+        '<img class="card-img" src="' + img + '" alt="' + b.name + '" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">' +
+        '<div class="card-ph" style="display:none"><div class="card-ph-num">' + (i+1) + '</div><div style="font-size:11px;color:var(--muted)">photo' + (i+1) + '.jpg</div></div>' +
+        (b.badge ? '<div class="card-badge">' + b.badge + '</div>' : '') +
+      '</div>' +
+      '<div class="card-body">' +
+        '<div class="card-name">' + b.name + '</div>' +
+        '<div class="card-desc">' + b.desc + '</div>' +
+        '<div class="card-footer">' +
+          '<div class="card-price">' + b.price + ' <span>MDL</span></div>' +
+          '<button class="card-btn" onclick="openModal(\'' + b.name + '\')">' + t.btnCard + '</button>' +
+        '</div>' +
+      '</div>';
+    grid.appendChild(card);
+    var o1 = document.createElement('option');
+    o1.value = b.name; o1.textContent = b.name + ' — ' + b.price + ' MDL';
+    cfSel.appendChild(o1);
+    mSel.appendChild(o1.cloneNode(true));
+  });
+  // Animate
+  var cards = grid.querySelectorAll('.card');
+  cards.forEach(function(c, i) {
+    c.style.opacity = '0';
+    c.style.transform = 'translateY(28px)';
+    setTimeout(function(){ c.style.transition='opacity .5s ease,transform .5s ease,border-color .3s,box-shadow .3s'; c.style.opacity='1'; c.style.transform='translateY(0)'; }, 100 + i * 80);
+  });
+  if(modalBouquet) document.getElementById('m-bouquet').value = modalBouquet;
+}
+
+function buildDatePickers() {
+  var months = T[lang].months;
+  var year = new Date().getFullYear();
+  ['cf','m'].forEach(function(p) {
+    var d = document.getElementById(p+'-day');
+    var mo = document.getElementById(p+'-month');
+    var y = document.getElementById(p+'-year');
+    if(!d) return;
+    d.innerHTML = '<option value="">—</option>';
+    for(var i=1;i<=31;i++) d.innerHTML += '<option value="'+i+'">'+i+'</option>';
+    mo.innerHTML = '<option value="">—</option>';
+    months.forEach(function(m,i){ mo.innerHTML += '<option value="'+(i+1)+'">'+m+'</option>'; });
+    y.innerHTML = '<option value="'+year+'">'+year+'</option><option value="'+(year+1)+'">'+(year+1)+'</option>';
+  });
+}
+
+function toggleLang() {
+  var dd = document.getElementById('langDropdown');
+  dd.classList.toggle('open');
+}
+
+function setLang(l) {
+  lang = l;
+  document.getElementById('langDropdown').classList.remove('open');
+  document.getElementById('currentFlag').textContent = l === 'ro' ? '🇷🇴' : '🇷🇺';
+  document.getElementById('opt-ro').classList.toggle('active', l === 'ro');
+  document.getElementById('opt-ru').classList.toggle('active', l === 'ru');
+  applyLang();
+}
+
+document.addEventListener('click', function(e) {
+  if(!e.target.closest('.lang-wrap')) {
+    var dd = document.getElementById('langDropdown');
+    if(dd) dd.classList.remove('open');
+  }
+});
+
+function openModal(name) {
+  modalBouquet = name;
+  document.getElementById('m-form').style.display = 'block';
+  document.getElementById('m-success').style.display = 'none';
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  document.getElementById('m-title').textContent = name || T[lang].mDefaultTitle;
+  if(name) document.getElementById('m-bouquet').value = name;
+}
+function closeModal() {
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow = '';
+  modalBouquet = null;
+}
+function bgClose(e) { if(e.target.id === 'overlay') closeModal(); }
+document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeModal(); });
+
+// URL-ul botului tau de pe Railway (inlocuieste dupa deploy)
+var BOT_URL = 'https://flowerbot-production-c5a9.up.railway.app/order';
+
+function sendOrderToBot(name, phone, bouquet, date, address, message) {
+  fetch(BOT_URL, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({name:name, phone:phone, bouquet:bouquet, date:date, address:address, message:message})
+  }).catch(function(e){ console.log('Bot error:', e); });
+}
+
+function submitModal() {
+  var name  = document.getElementById('m-name').value.trim();
+  var phone = document.getElementById('m-phone').value.trim();
+  if(!name || !phone) { alert(T[lang].alertFill); return; }
+  var bouquet = document.getElementById('m-bouquet').value || '—';
+  var day   = document.getElementById('m-day').value;
+  var month = document.getElementById('m-month').value;
+  var year  = document.getElementById('m-year').value;
+  var date  = (day && month && year) ? day+' '+T[lang].months[month-1]+' '+year : '—';
+  var addr  = document.getElementById('m-addr').value.trim() || '—';
+  var msg   = document.getElementById('m-msg').value.trim() || '—';
+  sendOrderToBot(name, phone, bouquet, date, addr, msg);
+  document.getElementById('m-form').style.display = 'none';
+  document.getElementById('m-success').style.display = 'block';
+  setTimeout(closeModal, 3000);
+}
+
+function submitContact() {
+  var name  = document.getElementById('cf-name').value.trim();
+  var phone = document.getElementById('cf-phone').value.trim();
+  if(!name || !phone) { alert(T[lang].alertFill); return; }
+  var bouquet = document.getElementById('cf-bouquet').value || '—';
+  var day   = document.getElementById('cf-day').value;
+  var month = document.getElementById('cf-month').value;
+  var year  = document.getElementById('cf-year').value;
+  var date  = (day && month && year) ? day+' '+T[lang].months[month-1]+' '+year : '—';
+  var addr  = document.getElementById('cf-addr').value.trim() || '—';
+  var msg   = document.getElementById('cf-msg').value.trim() || '—';
+  sendOrderToBot(name, phone, bouquet, date, addr, msg);
+  document.querySelector('.contact-wrap').querySelectorAll('.field,.contact-grid').forEach(function(el){ el.style.display='none'; });
+  document.getElementById('cf-submit').style.display = 'none';
+  document.querySelector('.form-note').style.display = 'none';
+  document.getElementById('cf-success').style.display = 'block';
+}
+
+applyLang();
+</script>
+</body>
+</html>
