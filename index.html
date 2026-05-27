@@ -238,7 +238,7 @@ footer a{color:var(--rose);text-decoration:none}
   <div class="contact-wrap">
     <div class="contact-grid">
       <div class="field"><label id="lbl-name"></label><input type="text" id="cf-name"></div>
-      <div class="field"><label id="lbl-phone"></label><input type="tel" id="cf-phone"></div>
+      <div class="field"><label id="lbl-phone"></label><input type="tel" id="cf-phone" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9+\s]/g,'')"></div>
     </div>
     <div class="field"><label id="lbl-bouquet"></label><select id="cf-bouquet"></select></div>
     <div class="contact-grid">
@@ -253,6 +253,14 @@ footer a{color:var(--rose);text-decoration:none}
       <div class="field"><label id="lbl-addr"></label><input type="text" id="cf-addr"></div>
     </div>
     <div class="field"><label id="lbl-msg"></label><textarea id="cf-msg"></textarea></div>
+    <div class="field">
+      <label id="cf-captcha-label"></label>
+      <div style="display:flex;align-items:center;gap:12px">
+        <div id="cf-captcha-q" style="background:rgba(232,133,106,.15);border:1px solid rgba(232,133,106,.3);border-radius:8px;padding:12px 20px;font-family:'Playfair Display',serif;font-size:20px;color:#fff;font-weight:700;letter-spacing:0.1em;min-width:110px;text-align:center"></div>
+        <span style="color:var(--muted);font-size:18px">=</span>
+        <input type="number" id="cf-captcha-a" inputmode="numeric" style="width:90px;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.1);border-radius:8px;padding:13px 16px;color:#fff;font-family:'Manrope',sans-serif;font-size:18px;outline:none;transition:border-color .2s" onfocus="this.style.borderColor='var(--rose)'" onblur="this.style.borderColor='rgba(255,255,255,.1)'">
+      </div>
+    </div>
     <button class="btn-primary" id="cf-submit" style="width:100%;justify-content:center;font-size:15px;padding:18px" onclick="submitContact()"></button>
     <p class="form-note" id="form-note"></p>
     <div id="cf-success" style="display:none;text-align:center;padding:24px 0">
@@ -271,7 +279,7 @@ footer a{color:var(--rose);text-decoration:none}
       <div class="modal-title" id="m-title"></div>
       <div class="field-row">
         <div class="field"><label id="m-lbl-name"></label><input type="text" id="m-name"></div>
-        <div class="field"><label id="m-lbl-phone"></label><input type="tel" id="m-phone"></div>
+        <div class="field"><label id="m-lbl-phone"></label><input type="tel" id="m-phone" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9+\s]/g,'')"></div>
       </div>
       <div class="field"><label id="m-lbl-bouquet"></label><select id="m-bouquet"></select></div>
       <div class="field-row">
@@ -286,6 +294,14 @@ footer a{color:var(--rose);text-decoration:none}
         <div class="field"><label id="m-lbl-addr"></label><input type="text" id="m-addr"></div>
       </div>
       <div class="field"><label id="m-lbl-msg"></label><textarea id="m-msg"></textarea></div>
+      <div class="field">
+        <label id="m-captcha-label"></label>
+        <div style="display:flex;align-items:center;gap:12px">
+          <div id="m-captcha-q" style="background:rgba(232,133,106,.15);border:1px solid rgba(232,133,106,.3);border-radius:8px;padding:12px 20px;font-family:'Playfair Display',serif;font-size:20px;color:#fff;font-weight:700;letter-spacing:0.1em;min-width:110px;text-align:center"></div>
+          <span style="color:var(--muted);font-size:18px">=</span>
+          <input type="number" id="m-captcha-a" inputmode="numeric" style="width:90px;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.1);border-radius:8px;padding:13px 16px;color:#fff;font-family:'Manrope',sans-serif;font-size:18px;outline:none;transition:border-color .2s" onfocus="this.style.borderColor='var(--rose)'" onblur="this.style.borderColor='rgba(255,255,255,.1)'">
+        </div>
+      </div>
       <button class="modal-submit" id="m-submit" onclick="submitModal()"></button>
       <p class="modal-note" id="m-note"></p>
     </div>
@@ -574,6 +590,11 @@ function openModal(name) {
   document.body.style.overflow = 'hidden';
   document.getElementById('m-title').textContent = name || T[lang].mDefaultTitle;
   if(name) document.getElementById('m-bouquet').value = name;
+  // Regenerate captcha every time modal opens
+  mCaptchaAnswer = genCaptcha('m-captcha-q', 'm-captcha-label');
+  document.getElementById('m-captcha-a').value = '';
+  var lbl = lang === 'ro' ? 'Verificare anti-spam' : 'Проверка от спама';
+  document.getElementById('m-captcha-label').textContent = lbl;
 }
 function closeModal() {
   document.getElementById('overlay').classList.remove('open');
@@ -582,6 +603,28 @@ function closeModal() {
 }
 function bgClose(e) { if(e.target.id === 'overlay') closeModal(); }
 document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeModal(); });
+
+// ── CAPTCHA ──
+var cfCaptchaAnswer = 0;
+var mCaptchaAnswer  = 0;
+
+function genCaptcha(qId, labelId) {
+  var a = Math.floor(Math.random() * 10) + 1;
+  var b = Math.floor(Math.random() * 10) + 1;
+  document.getElementById(qId).textContent = a + ' + ' + b + ' = ?';
+  return a + b;
+}
+
+function initCaptchas() {
+  cfCaptchaAnswer = genCaptcha('cf-captcha-q', 'cf-captcha-label');
+  mCaptchaAnswer  = genCaptcha('m-captcha-q',  'm-captcha-label');
+  // set labels via translation
+  var lbl = lang === 'ro' ? 'Verificare anti-spam' : 'Проверка от спама';
+  var el1 = document.getElementById('cf-captcha-label');
+  var el2 = document.getElementById('m-captcha-label');
+  if(el1) el1.textContent = lbl;
+  if(el2) el2.textContent = lbl;
+}
 
 // URL-ul botului tau de pe Railway (inlocuieste dupa deploy)
 var BOT_URL = 'https://flowerbot-production-c5a9.up.railway.app/order';
@@ -598,6 +641,13 @@ function submitModal() {
   var name  = document.getElementById('m-name').value.trim();
   var phone = document.getElementById('m-phone').value.trim();
   if(!name || !phone) { alert(T[lang].alertFill); return; }
+  var captchaInput = parseInt(document.getElementById('m-captcha-a').value);
+  if(captchaInput !== mCaptchaAnswer) {
+    alert(lang === 'ro' ? 'Răspuns greșit la verificare! Încearcă din nou.' : 'Неверный ответ! Попробуйте снова.');
+    mCaptchaAnswer = genCaptcha('m-captcha-q', 'm-captcha-label');
+    document.getElementById('m-captcha-a').value = '';
+    return;
+  }
   var bouquet = document.getElementById('m-bouquet').value || '—';
   var day   = document.getElementById('m-day').value;
   var month = document.getElementById('m-month').value;
@@ -615,6 +665,13 @@ function submitContact() {
   var name  = document.getElementById('cf-name').value.trim();
   var phone = document.getElementById('cf-phone').value.trim();
   if(!name || !phone) { alert(T[lang].alertFill); return; }
+  var captchaInput = parseInt(document.getElementById('cf-captcha-a').value);
+  if(captchaInput !== cfCaptchaAnswer) {
+    alert(lang === 'ro' ? 'Răspuns greșit la verificare! Încearcă din nou.' : 'Неверный ответ! Попробуйте снова.');
+    cfCaptchaAnswer = genCaptcha('cf-captcha-q', 'cf-captcha-label');
+    document.getElementById('cf-captcha-a').value = '';
+    return;
+  }
   var bouquet = document.getElementById('cf-bouquet').value || '—';
   var day   = document.getElementById('cf-day').value;
   var month = document.getElementById('cf-month').value;
@@ -630,6 +687,7 @@ function submitContact() {
 }
 
 applyLang();
+initCaptchas();
 </script>
 </body>
 </html>
