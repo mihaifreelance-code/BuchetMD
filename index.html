@@ -226,6 +226,14 @@ footer a{color:var(--rose);text-decoration:none}
   <div class="section-top">
     <div class="section-tag" id="col-tag"></div>
     <h2 class="section-title" id="col-title"></h2>
+    <!-- Info banner -->
+    <div id="col-info" style="margin-top:28px;max-width:680px;margin-left:auto;margin-right:auto;background:rgba(232,133,106,0.1);border:1px solid rgba(232,133,106,0.3);border-radius:12px;padding:22px 28px;display:flex;align-items:flex-start;gap:16px">
+      <div style="font-size:28px;flex-shrink:0">🌸</div>
+      <div style="text-align:left">
+        <div id="col-info-title" style="font-family:'Playfair Display',serif;font-size:18px;color:#fff;margin-bottom:6px;font-weight:600"></div>
+        <div id="col-info-text" style="font-size:13px;color:var(--muted);line-height:1.7"></div>
+      </div>
+    </div>
   </div>
   <div class="grid" id="grid"></div>
 </section>
@@ -353,6 +361,8 @@ const T = {
     strip4:'<strong>Comenzi 24/7</strong> pe WhatsApp și Telegram',
     colTag:'Colecția noastră',
     colTitle:'Alege <em>buchetul tău</em>',
+    colInfoTitle:'Tocmai ne-am deschis! 🎉',
+    colInfoText:'Pozele cu buchete vor fi adăugate în curând. Pentru a afla stocul disponibil de flori, vă rugăm să ne contactați pe <a href="https://wa.me/37367355732" style="color:var(--rose)">WhatsApp</a> sau <a href="https://t.me/BuchetMD" style="color:var(--rose)">Telegram</a>.',
     formTag:'Contactează-ne',
     formTitle:'Plasează <em>comanda</em>.',
     lblName:'Numele tău',lblPhone:'Telefon',
@@ -401,6 +411,8 @@ const T = {
     strip4:'<strong>Заказ 24/7</strong> в WhatsApp и Telegram',
     colTag:'Наша коллекция',
     colTitle:'Выберите <em>свой</em> букет',
+    colInfoTitle:'Мы только открылись! 🎉',
+    colInfoText:'Фотографии букетов скоро будут добавлены. Чтобы узнать наличие цветов, свяжитесь с нами в <a href="https://wa.me/37367355732" style="color:var(--rose)">WhatsApp</a> или <a href="https://t.me/BuchetMD" style="color:var(--rose)">Telegram</a>.',
     formTag:'Оставить заявку',
     formTitle:'Оформить <em>заказ</em>.',
     lblName:'Ваше имя',lblPhone:'Телефон',
@@ -453,6 +465,8 @@ function applyLang() {
   document.getElementById('btn-view').textContent = t.btnView;
   document.getElementById('col-tag').textContent = t.colTag;
   document.getElementById('col-title').innerHTML = t.colTitle;
+  document.getElementById('col-info-title').textContent = t.colInfoTitle;
+  document.getElementById('col-info-text').innerHTML = t.colInfoText;
   document.getElementById('form-tag').textContent = t.formTag;
   document.getElementById('form-title').innerHTML = t.formTitle;
   document.getElementById('lbl-name').textContent = t.lblName;
@@ -524,14 +538,13 @@ function buildGrid() {
       '<div class="card-body">' +
         '<div class="card-name">' + b.name + '</div>' +
         '<div class="card-desc">' + b.desc + '</div>' +
-        '<div class="card-footer">' +
-          '<div class="card-price">' + b.price + ' <span>MDL</span></div>' +
+        '<div class="card-footer" style="justify-content:flex-end">' +
           '<button class="card-btn" onclick="openModal(\'' + b.name + '\')">' + t.btnCard + '</button>' +
         '</div>' +
       '</div>';
     grid.appendChild(card);
     var o1 = document.createElement('option');
-    o1.value = b.name; o1.textContent = b.name + ' — ' + b.price + ' MDL';
+    o1.value = b.name; o1.textContent = b.name;
     cfSel.appendChild(o1);
     mSel.appendChild(o1.cloneNode(true));
   });
