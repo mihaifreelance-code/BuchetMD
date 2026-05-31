@@ -5,10 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BuchetMD</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌸</text></svg>">
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-3TNSKGF4FK"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-3TNSKGF4FK');
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#0d0a08;--card:#161210;--rose:#e8856a;--rose2:#c9604a;--gold:#d4a85a;--cream:#f5ede4;--muted:#8a7a72;--border:rgba(255,255,255,0.07)}
+:root{--bg:#0d0a08;--card:#161210;--rose:#e8856a;--rose2:#c9604a;--gold:#d4a85a;--cream:#f5ede4;--muted:#b8a89e;--border:rgba(255,255,255,0.07)}
 html{scroll-behavior:smooth}
 body{font-family:'Manrope',sans-serif;color:var(--cream);overflow-x:hidden;background:#0d0a08}
 
@@ -24,7 +32,7 @@ body{font-family:'Manrope',sans-serif;color:var(--cream);overflow-x:hidden;backg
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 .hero-title{font-family:'Playfair Display',serif;font-size:clamp(42px,6vw,82px);line-height:1.08;font-weight:700;color:#fff;margin-bottom:18px;animation:fadeUp .8s .15s ease forwards;opacity:0}
 .hero-title em{color:var(--rose);font-style:italic}
-.hero-sub{font-size:18px;color:rgba(245,237,228,.75);line-height:1.7;max-width:480px;margin-bottom:44px;font-weight:300;animation:fadeUp .8s .3s ease forwards;opacity:0}
+.hero-sub{font-size:18px;color:rgba(245,237,228,.92);line-height:1.7;max-width:480px;margin-bottom:44px;font-weight:300;animation:fadeUp .8s .3s ease forwards;opacity:0}
 .hero-actions{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;animation:fadeUp .8s .45s ease forwards;opacity:0}
 @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
 .btn-primary{display:inline-flex;align-items:center;gap:10px;background:var(--rose);color:#fff;padding:16px 32px;border-radius:6px;font-family:'Manrope',sans-serif;font-size:14px;font-weight:600;letter-spacing:.05em;text-decoration:none;border:none;cursor:pointer;transition:background .25s,transform .2s,box-shadow .25s;box-shadow:0 8px 32px rgba(232,133,106,.35)}
@@ -198,7 +206,7 @@ footer a{color:var(--rose);text-decoration:none}
     style="width:100%;height:100%;object-fit:cover;display:block">
     <source src="bg-video.mp4" type="video/mp4">
   </video>
-  <div style="position:absolute;inset:0;background:rgba(6,3,2,0.60)"></div>
+  <div style="position:absolute;inset:0;background:rgba(4,2,1,0.82)"></div>
 </div>
 
 <div class="ticker">
@@ -362,7 +370,7 @@ const T = {
     colTag:'Colecția noastră',
     colTitle:'Alege <em>buchetul tău</em>',
     colInfoTitle:'Tocmai ne-am deschis! 🎉',
-    colInfoText:'Pozele cu buchete vor fi adăugate în curând. Pentru a afla stocul disponibil de flori, vă rugăm să ne contactați pe <a href="https://wa.me/37367355732" style="color:var(--rose)">WhatsApp</a> sau <a href="https://t.me/BuchetMD" style="color:var(--rose)">Telegram</a>.',
+    colInfoText:'🌹 <strong style="color:var(--rose)">1 roză = 10 lei</strong> &nbsp;·&nbsp; Buchet minim din <strong style="color:var(--rose)">51 de roze</strong> pentru livrare gratuită &nbsp;·&nbsp; Pozele vor fi adăugate în curând.<br><br>Contactați-ne pentru a afla stocul disponibil: <a href="https://wa.me/37367355732" style="color:var(--rose)">WhatsApp</a> sau <a href="https://t.me/BuchetMD" style="color:var(--rose)">Telegram</a>.',
     formTag:'Contactează-ne',
     formTitle:'Plasează <em>comanda</em>.',
     lblName:'Numele tău',lblPhone:'Telefon',
@@ -383,18 +391,10 @@ const T = {
     alertFill:'Te rugăm să completezi numele și telefonul',
     months:['Ianuarie','Februarie','Martie','Aprilie','Mai','Iunie','Iulie','August','Septembrie','Octombrie','Noiembrie','Decembrie'],
     bouquets:[
-      {name:'Zori Roz',desc:'Bujori, trandafiri, eustomă',price:'1 200',badge:'Top vânzări'},
-      {name:'Tandrețe Albă',desc:'Trandafiri albi, margarete, gypsophila',price:'980',badge:null},
-      {name:'Zi Însorită',desc:'Floarea-soarelui, ranunculi, lavandă',price:'850',badge:null},
-      {name:'Vis Lila',desc:'Lavandă, lalele violet',price:'1 050',badge:'Noutate'},
-      {name:'Inimă Roșie',desc:'Trandafiri roșii, gălbenele',price:'1 400',badge:null},
-      {name:'Blues Piersică',desc:'Bujori piersică, frezie',price:'1 100',badge:null},
-      {name:'Briză de Mentă',desc:'Eustomă, verdeață, crizanteme',price:'760',badge:null},
-      {name:'Chic de Seară',desc:'Trandafiri bordo, hortensie închisă',price:'1 650',badge:'Premium'},
-      {name:'Studiu de Grădină',desc:'Flori de câmp amestecate',price:'680',badge:null},
-      {name:'Apus Coral',desc:'Trandafiri corai, orhidee',price:'1 300',badge:null},
-      {name:'Pasărea Albastră',desc:'Irisi albaștri, lalele albe',price:'920',badge:null},
-      {name:'Poveste de Toamnă',desc:'Crizanteme, scoruș, flori uscate',price:'790',badge:null},
+      {name:'Zori Roz',desc:'Bujori, trandafiri, eustomă',badge:null},
+      {name:'Tandrețe Albă',desc:'Trandafiri albi, margarete, gypsophila',badge:null},
+      {name:'Inimă Roșie',desc:'Trandafiri roșii, gălbenele',badge:null},
+      {name:'Chic de Seară',desc:'Trandafiri bordo, hortensie închisă',badge:null},
     ]
   },
   ru: {
@@ -412,7 +412,7 @@ const T = {
     colTag:'Наша коллекция',
     colTitle:'Выберите <em>свой</em> букет',
     colInfoTitle:'Мы только открылись! 🎉',
-    colInfoText:'Фотографии букетов скоро будут добавлены. Чтобы узнать наличие цветов, свяжитесь с нами в <a href="https://wa.me/37367355732" style="color:var(--rose)">WhatsApp</a> или <a href="https://t.me/BuchetMD" style="color:var(--rose)">Telegram</a>.',
+    colInfoText:'🌹 <strong style="color:var(--rose)">1 роза = 10 леев</strong> &nbsp;·&nbsp; Минимальный букет из <strong style="color:var(--rose)">51 розы</strong> для бесплатной доставки &nbsp;·&nbsp; Фото скоро будут добавлены.<br><br>Свяжитесь с нами для уточнения наличия: <a href="https://wa.me/37367355732" style="color:var(--rose)">WhatsApp</a> или <a href="https://t.me/BuchetMD" style="color:var(--rose)">Telegram</a>.',
     formTag:'Оставить заявку',
     formTitle:'Оформить <em>заказ</em>.',
     lblName:'Ваше имя',lblPhone:'Телефон',
@@ -433,18 +433,10 @@ const T = {
     alertFill:'Пожалуйста, заполните имя и телефон',
     months:['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'],
     bouquets:[
-      {name:'Розовый рассвет',desc:'Пионы, розы, эустома',price:'1 200',badge:'Хит продаж'},
-      {name:'Белая нежность',desc:'Белые розы, ромашки, гипсофила',price:'980',badge:null},
-      {name:'Солнечный день',desc:'Подсолнухи, ранункулюсы, лаванда',price:'850',badge:null},
-      {name:'Лиловый сон',desc:'Лаванда, фиолетовые тюльпаны',price:'1 050',badge:'Новинка'},
-      {name:'Алое сердце',desc:'Красные розы, бархатцы',price:'1 400',badge:null},
-      {name:'Персиковый блюз',desc:'Персиковые пионы, фрезия',price:'1 100',badge:null},
-      {name:'Мятный бриз',desc:'Эустома, зелень, хризантемы',price:'760',badge:null},
-      {name:'Вечерний шик',desc:'Бордовые розы, тёмная гортензия',price:'1 650',badge:'Премиум'},
-      {name:'Садовый этюд',desc:'Смешанные полевые цветы',price:'680',badge:null},
-      {name:'Коралловый закат',desc:'Коралловые розы, орхидеи',price:'1 300',badge:null},
-      {name:'Синяя птица',desc:'Синие ирисы, белые тюльпаны',price:'920',badge:null},
-      {name:'Осенняя сказка',desc:'Хризантемы, рябина, сухоцветы',price:'790',badge:null},
+      {name:'Розовый рассвет',desc:'Пионы, розы, эустома',badge:null},
+      {name:'Белая нежность',desc:'Белые розы, ромашки, гипсофила',badge:null},
+      {name:'Алое сердце',desc:'Красные розы, бархатцы',badge:null},
+      {name:'Вечерний шик',desc:'Бордовые розы, тёмная гортензия',badge:null},
     ]
   }
 };
@@ -643,6 +635,14 @@ function initCaptchas() {
 var BOT_URL = 'https://flowerbot-production-c5a9.up.railway.app/order';
 
 function sendOrderToBot(name, phone, bouquet, date, address, message) {
+  // Google Analytics event
+  if(typeof gtag !== 'undefined') {
+    gtag('event', 'purchase', {
+      event_category: 'Comanda',
+      event_label: bouquet,
+      value: 1
+    });
+  }
   fetch(BOT_URL, {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
